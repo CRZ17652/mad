@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple PWA</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2196F3">
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #2196F3;
+        }
+        .content {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 10px;
+            background: #e0e0e0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>Simple PWA Demo</h1>
+        <p>This is a minimal PWA that demonstrates core PWA functionality.</p>
+        <img src="tree.jpg" alt="Tree Image" />
+        <div class="status" id="status">Checking connection...</div>
+    </div>
+
+    <script>
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker registration failed', err));
+            });
+        }
+
+        // Update connection status
+        function updateStatus() {
+            const statusElement = document.getElementById('status');
+            if (navigator.onLine) {
+                statusElement.textContent = 'You are online';
+                statusElement.style.background = '#4CAF50';
+                statusElement.style.color = 'white';
+            } else {
+                statusElement.textContent = 'You are offline, but the app still works!';
+                statusElement.style.background = '#FF9800';
+                statusElement.style.color = 'white';
+            }
+        }
+
+        // Check status on load and when online/offline status changes
+        window.addEventListener('load', updateStatus);
+        window.addEventListener('online', updateStatus);
+        window.addEventListener('offline', updateStatus);
+    </script>
+</body>
+</html>
