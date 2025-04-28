@@ -1,0 +1,101 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Demo Flutter',
+      theme: ThemeData(primarySwatch: Colors.green),
+      home: const SimpleWidgetsPage(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class SimpleWidgetsPage extends StatefulWidget {
+  const SimpleWidgetsPage({super.key});
+
+  @override
+  State<SimpleWidgetsPage> createState() => _SimpleWidgetsPageState();
+}
+
+class _SimpleWidgetsPageState extends State<SimpleWidgetsPage> {
+  final TextEditingController myController = TextEditingController();
+  String result = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Widgets Example')),
+      body: Column(
+        children: [
+          const SizedBox(height: 10),
+          const Text('Hello Flutter!',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 10),
+
+          TextField(
+            controller: myController,
+            decoration: const InputDecoration(
+              hintText: 'Enter something',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.purple),
+            onPressed: () {
+              setState(() {
+                result = myController.text;
+              });
+            },
+            child: const Text('Click Here'),
+          ),
+          const SizedBox(height: 10),
+
+          if (result.isNotEmpty)
+            Text(
+              'Result: $result',
+              style: const TextStyle(fontSize: 16, color: Colors.red),
+            ),
+
+          const SizedBox(height: 20),
+          Container(
+            padding: const EdgeInsets.all(8),
+            color: Colors.orange,
+            child: const Text('This is a container'),
+          ),
+          const SizedBox(height: 15),
+
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.favorite, color: Colors.green),
+              SizedBox(width: 5),
+              Text('Favorite', style: TextStyle(color: Colors.black)),
+            ],
+          ),
+          const SizedBox(height: 20),
+
+          Image.network(
+            'https://images.pexels.com/photos/31005845/pexels-photo-31005845/free-photo-of-serene-view-of-lake-bled-and-church-on-island.jpeg?auto=compress&cs=tinysrgb&w=800&lazy=load',
+            height: 120,
+            width: 250,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) => const Text(
+              'Error loading image',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

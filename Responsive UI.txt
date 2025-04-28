@@ -1,0 +1,65 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Responsive Containers',
+      home: ResponsiveContainers(),
+    );
+  }
+}
+
+class ResponsiveContainers extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Responsive Layout')),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          bool isWide = constraints.maxWidth > 600;
+
+          List<Widget> containers = [
+            buildBox('Red Box', Colors.red),
+            buildBox('Green Box', Colors.green),
+            buildBox('Blue Box', Colors.blue),
+          ];
+
+          return Padding(
+            padding: EdgeInsets.all(8.0), // Less padding for a simple look
+            child: isWide
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center, // Simplified alignment
+                    children: containers,
+                  )
+                : Column(
+                    children: containers.map((box) => Padding(
+                      padding: EdgeInsets.only(bottom: 10), // Less space between boxes
+                      child: box,
+                    )).toList(),
+                  ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget buildBox(String label, Color color) {
+    return Container(
+      height: 100, // Reduced height for a more compact look
+      width: 100,  // Explicit width to control size
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(8), // Simpler border radius
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        label,
+        style: TextStyle(color: Colors.white, fontSize: 14), // Simpler text style
+      ),
+    );
+  }
+}

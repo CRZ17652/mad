@@ -1,0 +1,119 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Demo',
+      theme: ThemeData(primarySwatch: Colors.purple),
+      home: const SimplifiedMediaDemo(),
+    );
+  }
+}
+
+class SimplifiedMediaDemo extends StatelessWidget {
+  const SimplifiedMediaDemo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Media Example'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            const Text('Welcome!', style: TextStyle(fontSize: 22, color: Colors.pink)),
+
+            const SizedBox(height: 15),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.thumb_up, color: Colors.blue, size: 35),
+                SizedBox(width: 5),
+                Text('Like it!', style: TextStyle(fontSize: 18)),
+              ],
+            ),
+            const SizedBox(height: 30),
+
+            Container(
+              height: 150,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.green, width: 2),
+              ),
+              child: Image.network(
+                'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
+                fit: BoxFit.contain,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const Center(child: CircularProgressIndicator(color: Colors.red));
+                },
+              ),
+            ),
+
+            const SizedBox(height: 20),
+            const Text('Basic Bar Chart Below:', style: TextStyle(fontSize: 20, color: Colors.deepOrange)),
+            const SizedBox(height: 10),
+            
+            Expanded(
+              child: MyBarChart(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MyBarChart extends StatelessWidget {
+  MyBarChart({super.key});
+
+  final List<_BarData> mydata = [
+    _BarData("M", 40, Colors.red),
+    _BarData("T", 90, Colors.green),
+    _BarData("W", 60, Colors.pink),
+    _BarData("T", 30, Colors.yellow),
+    _BarData("F", 100, Colors.blue),
+    _BarData("S", 70, Colors.cyan),
+    _BarData("S", 20, Colors.deepPurple),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: mydata.map((item) {
+        return Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                height: item.value,
+                width: 15,
+                color: item.color,
+              ),
+              const SizedBox(height: 4),
+              Text(item.label, style: const TextStyle(fontSize: 12)),
+            ],
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+
+class _BarData {
+  final String label;
+  final double value;
+  final Color color;
+
+  _BarData(this.label, this.value, this.color);
+}

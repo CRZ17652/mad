@@ -1,0 +1,131 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: Scaffold(
+      appBar: AppBar(title: Text('Form Example'), backgroundColor: Colors.deepOrange),
+      body: Padding(
+        padding: EdgeInsets.all(12),
+        child: MyForm(),
+      ),
+    ),
+  ));
+}
+
+class MyForm extends StatefulWidget {
+  @override
+  _MyFormState createState() => _MyFormState();
+}
+
+class _MyFormState extends State<MyForm> {
+  final _formKey = GlobalKey<FormState>();
+  String _name = '', _email = '', _phone = '', _address = '';
+  bool _isSubmitted = false;
+
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      // Save the form first to trigger onSaved callbacks
+      _formKey.currentState!.save();
+      
+      setState(() {
+        _isSubmitted = true;
+      });
+
+      // Show snackbar with just the name
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Thanks for submitting, $_name!'),
+        backgroundColor: Colors.blue,
+      ));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('Fill the Form', style: TextStyle(fontSize: 25, color: Colors.purple)),
+          SizedBox(height: 10),
+
+          _buildTextField('Enter Name', (value) {
+            if (value == null || value.isEmpty) {
+              return 'Name required';
+            }
+            return null;
+          }, (value) => _name = value!),
+
+          SizedBox(height: 20),
+
+          _buildTextField('Email Here', (value) {
+            if (value == null || value.isEmpty) {
+              return 'Email needed';
+            }
+            return null;
+          }, (value) => _email = value!),
+
+          SizedBox(height: 20),
+
+          _buildTextField('Phone Number', (value) {
+            if (value == null || value.isEmpty) {
+              return 'Phone number required';
+            }
+            return null;
+          }, (value) => _phone = value!),
+
+          SizedBox(height: 20),
+
+          _buildTextField('Address', (value) {
+            if (value == null || value.isEmpty) {
+              return 'Address required';
+            }
+            return null;
+          }, (value) => _address = value!),
+
+          SizedBox(height: 30),
+
+          ElevatedButton(
+            onPressed: _submitForm,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+            ),
+            child: Text('Submit Now', style: TextStyle(fontSize: 20, color: Colors.white)),
+          ),
+
+          // Displaying additional information below the form if submitted
+          if (_isSubmitted) ...[
+            SizedBox(height: 30),
+            Text('Thanks for submitting, $_name!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text('Name: $_name', style: TextStyle(fontSize: 18)),
+            Text('Email: $_email', style: TextStyle(fontSize: 18)),
+            Text('Phone: $_phone', style: TextStyle(fontSize: 18)),
+            Text('Address: $_address', style: TextStyle(fontSize: 18)),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextField(String label, String? Function(String?) validator, Function(String?) onSaved) {
+    return TextFormField(
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.red, fontSize: 16),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.brown, width: 2),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.pink, width: 3),
+        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+      ),
+      style: TextStyle(fontSize: 14, color: Colors.black),
+      validator: validator,
+      onSaved: onSaved,
+    );
+  }
+}
